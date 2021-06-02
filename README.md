@@ -15,3 +15,5 @@
 - Criar uma branch no repositório com o nome avalicao-nome-sobrenome (Exemplo: avaliacao-azrael-garden);
 - Subir o desafio na branch com um readme.md, explicando sobre o que foi feito no desafio;
 - Subir o desafio até às 13h do dia 07/06 no repositório do github (https://github.com/AzraelGarden/avaliacao-sprint-3/).
+
+- Rafael Inácio
