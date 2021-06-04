@@ -48,7 +48,7 @@ Artigos Selecionados:
 
 
 Nuvem de palavras obtida referente ao primeiro artigo:
-
+(outras inclusas no código)
 <img src=https://i.ibb.co/9bKJ8Ps/Nuvem-Palavras-Primeiro-Artigo-2.jpg>
 
 ## Mongo DB 🗂️
