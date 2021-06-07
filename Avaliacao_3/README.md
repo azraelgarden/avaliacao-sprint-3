@@ -6,6 +6,8 @@
 * pip
 * Mongo DB
 * BeautifulSoup
+* SkLearn
+* Spacy
 * Sua IDE/Editor de texto favorito
 
 ## Criando uma conexão com o MongoDB
@@ -238,6 +240,109 @@ for i in range(0, 10):
     gerar_nuvem_palavras(paragrafo_artigo)
 ```
 
+## Treinando um dataset para análise de sentimentos
 
+* Vamos utilizar um dataset de tweets para treinar um modelo
+
+* O primeiro passo é importar as bibliotecas necessárias
+
+```py
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import metrics
+from sklearn.model_selection import cross_val_predict
+```
+
+* Agora vamos importar o dataset csv e transforma-lo em um dataframe
+
+```py
+#Importando o dataset
+tweets_df = pd.read_csv('Tweets_Mg.csv')
+```
+
+* Para facilitar, vamos apenas selecionar as colunas Text e Classificacao, pois são elas que iremos utilizar para treinar nosso modelo
+
+```py
+# Separando apenas as colunas que serão usadas
+# Text => tweet
+# Classificacao => Sentimentos (pos, neg, neutro)
+tweets = tweets_df[['Text', 'Classificacao']]
+```
+* Se quiser ter uma visão melhor de quantos tweets neg, pos e neutro existem nesse dataset, pode digitar o código abaixo
+
+```py
+tweets.Classificacao.value_counts()
+```
+
+* Vamos criar uma variavel chamada tweets_treino para armazenar apenas os valores dos textos e classificação
+
+```py
+# Obtendo os valores dos tweets e transformando-os em arrays numpy
+tweets_treino = tweets.values
+print(f'Textos: {tweets_treino[:,0]}')
+print('\n \n')
+print(f'Sentimentos: {tweets_treino[:,1]}')
+```
+
+* Para treinar nosso modelo, precisamos de criar um vetor para cada palavra do tweets
+* A seguir, vamos utilizar o fit_transform para calcular a frequência das palavras
+* Serão usadadas todas as linhas e a coluna Texto (indice [0])
+
+```py
+#Vetor com cada uma das palavras dos tweets
+vectorizer = CountVectorizer(analyzer='word')
+
+# Calculando a frequência em que cada palavra ocorre
+freq_tweets = vectorizer.fit_transform(tweets_treino[:,0])
+```
+
+* Agora vamos construir nosso modelo e medir a acurácia
+```py
+# Criando um modelo de treinamento
+modelo = MultinomialNB()
+modelo.fit(freq_tweets, tweets_treino[:,1])
+
+#Medindo a acurácia
+resultados = cross_val_predict(modelo, freq_tweets, tweets_treino[:,1], cv = 10)
+acuracia = metrics.accuracy_score(tweets_treino[:,1], resultados) * 100
+
+print(f'{acuracia}%')
+```
+
+* Para testar, você pode criar um array de frases aleatórias que transmitem sentimentos positivo, negativo e neutro, para que o nosso modelo análise qual sentimento cada frase transmite
+
+```py
+testes = ['<<FRASES AQUI>>']
+
+freq_testes = vectorizer.transform(testes)
+resultado_analise = modelo.predict(freq_testes)
+resultado_analise
+```
+
+* Para analisar o sentimento dos arigos, vamos usar o mesmo principio
+
+* Vamos criar uma lista para adicionar os artigos
+
+* A seguir, devemos percorrer o dataframe dos paragragos processados dos artigos, ou seja, paragrafos sem stopwords
+
+* Para cada artigo, será transformado em string e adicionado na lista de artigos
+
+```py
+artigos_para_testes = []
+for artigo in df_paragrafos.Paragrafos_processados:
+    artigos_para_testes.append(str(artigo))
+
+artigos_para_testes
+```
+
+* Agora é so executar o mesmo código usado para analisar o sentimento das frases aleatórias, trocando apenas o nome da váriavel de teste
+
+* Como ultima tarefa, pode adicionar o resultado desses testes em uma nova coleção no MongoDB
+
+```py
+resultado_sentimento_artigos.insert_one({'Analise_sentimento': str(resultado_analise)})
+```
+
+## FIM!
 
 
