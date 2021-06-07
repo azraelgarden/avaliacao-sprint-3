@@ -8,7 +8,6 @@
 - spacy
 - pandas
 - wordCloud
-- 
 ## Conexão MongoDB
 - A partir da lib Pymongo, criamos uma conexao que sera responsável por criar o banco de dados e a coleção onde será guardado os dados de teste e resultados
 ```py
@@ -53,7 +52,6 @@ for url in urls:
    dataframe = pd.DataFrame(lista_paragrafos)
    dataframe = dataframe.rename(columns={0: 'conteudo_artigo_raw'})
 ```
-
 ![dataframe](https://user-images.githubusercontent.com/66642358/121042503-224fc700-c78a-11eb-9f05-0f77cd025a33.png)
 
 ## Spacy
@@ -111,9 +109,11 @@ for url in urls:
    df_tweets.insert(1, 'tratado', tweets_tratados)
 ```
 - Mostrando os 5 primeiros tweets
+
 ![image](https://user-images.githubusercontent.com/66642358/121043754-4b248c00-c78b-11eb-87c8-5024372199b6.png)
 
 - Wordcloud
+
 ![image](https://user-images.githubusercontent.com/66642358/121043823-5bd50200-c78b-11eb-864f-7682596daf08.png)
 
 ### Treinando um modelo com Sklearn
@@ -144,3 +144,5 @@ for url in urls:
    print(metrics.classification_report(classificacao, results, sentiments))# Plotando as medidas do modelo
 ```
 ![image](https://user-images.githubusercontent.com/66642358/121044234-bd956c00-c78b-11eb-866c-04d4bfe5930b.png)
+
+made with :heart: by <strong>whoisFreire</strong>
